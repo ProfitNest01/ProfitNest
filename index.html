@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Profit Nest</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,
+    "SF Pro Display","Segoe UI",Arial,sans-serif;
+    color:#281735;
+    background:
+    radial-gradient(circle at 10% 10%,#ffffff 0%,transparent 30%),
+    radial-gradient(circle at 90% 90%,#d8b9ff 0%,transparent 35%),
+    linear-gradient(135deg,#ffffff,#f3e8ff,#8b5cf6);
+}
+
+button, input, textarea, select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* NAVBAR */
+.nav{
+    height:70px;
+    padding:0 6%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#ffffff70;
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+    border-bottom:1px solid #ffffffaa;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    font-size:18px;
+}
+
+.logo{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-weight:900;
+    background:linear-gradient(135deg,#6d28d9,#b76cff);
+    box-shadow:0 8px 25px #7c3aed40;
+}
+
+.nav-actions{
+    display:flex;
+    gap:8px;
+}
+
+/* BUTTONS */
+.btn{
+    border:0;
+    border-radius:13px;
+    padding:11px 17px;
+    font-weight:700;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn:active{
+    transform: scale(0.98);
+}
+
+.primary{ background:#7c3aed; color:white; }
+.light{ background:#ffffffb5; color:#6d28d9; border:1px solid #ffffff; }
+.white-btn{ background:#ffffff; color:#7c3aed; border:1px solid #7c3aed; box-shadow:0 4px 15px #7c3aed20; }
+.white-btn:hover{ background:#f5f3ff; }
+.green{ background:#16a34a; color:white; }
+.red{ background:#dc2626; color:white; }
+.gray{ background:#64748b; color:white; }
+
+/* PAGE */
+.page{
+    min-height:calc(100vh - 70px);
+    padding:30px 20px;
+}
+
+/* GLASS CONTAINER */
+.glass{
+    background:#ffffff70;
+    border:1px solid #ffffffc0;
+    backdrop-filter:blur(28px);
+    -webkit-backdrop-filter:blur(28px);
+    box-shadow:0 25px 70px #3b176625;
+    border-radius:28px;
+}
+
+/* HERO */
+.hero{
+    width:min(800px,100%);
+    margin:60px auto;
+    padding:55px 30px;
+    text-align:center;
+}
+
+.hero h1{ margin:20px 0; font-size:clamp(36px,7vw,60px); }
+.hero h1 span{ color:#7c3aed; }
+.hero p{ color:#6f6278; line-height:1.7; margin-bottom:25px; }
+
+/* AUTH FORM */
+.auth{
+    width:min(520px,100%);
+    margin:25px auto;
+    padding:30px;
+}
+
+.auth h1{ text-align:center; margin:18px 0 7px; }
+.sub{ text-align:center; color:#756a7e; margin-bottom:20px; }
+
+label{
+    display:block;
+    margin:15px 0 7px;
+    font-weight:700;
+    font-size:14px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:14px;
+    border-radius:13px;
+    border:1px solid #d9cbea;
+    background:#ffffffa8;
+    outline:none;
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+input:focus, textarea:focus, select:focus{
+    border-color:#7c3aed;
+    box-shadow:0 0 0 4px #7c3aed12;
+}
+
+/* PASSWORD INPUT WITH EYE BUTTON */
+.password-box{
+    position:relative;
+    display:flex;
+    align-items:center;
+}
+
+.password-box input{
+    padding-right:45px;
+}
+
+.eye-btn{
+    position:absolute;
+    right:12px;
+    background:none;
+    border:none;
+    font-size:18px;
+    color:#7c3aed;
+    padding:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    user-select:none;
+}
+
+/* MESSAGE */
+.message{
+    margin-top:14px;
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:700;
+}
+.success{ background:#dcfce7; color:#166534; }
+.error{ background:#fee2e2; color:#991b1b; }
+
+/* DASHBOARD */
+.dashboard{ width:min(1050px,100%); margin:auto; }
+.welcome{ padding:25px; margin-bottom:20px; }
+.balance{ padding:28px; margin-bottom:20px; }
+.balance-number{ font-size:43px; font-weight:900; color:#7c3aed; margin:8px 0 18px; }
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.card{ padding:24px; }
+.card h2{ margin-bottom:10px; }
+.actions{ display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
+
+/* STATUS BADGE */
+.status{
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:20px;
+    background:#fff7ed;
+    color:#9a3412;
+    font-weight:800;
+    font-size:13px;
+}
+.status.active{ background:#dcfce7; color:#166534; }
+.status.declined{ background:#fee2e2; color:#991b1b; }
+
+/* WARNING BOX */
+.warning-box{
+    margin-top:15px;
+    padding:14px;
+    border-radius:14px;
+    background:#fef2f2;
+    border:1px solid #fca5a5;
+    color:#991b1b;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.5;
+}
+
+/* EARNING BADGE */
+.earning-badge{
+    margin-top:12px;
+    padding:10px 14px;
+    border-radius:12px;
+    background:#f3e8ff;
+    border:1px solid #d8b9ff;
+    color:#6d28d9;
+    font-size:14px;
+    font-weight:800;
+    display:inline-block;
+}
+
+/* BOX & PAYMENT CARD */
+.info-box{
+    margin-top:18px;
+    padding:18px;
+    border-radius:18px;
+    background:#f8f2ff99;
+    border:1px solid #ffffff;
+}
+
+.payment-card{
+    background:#ffffffd0;
+    border:1px solid #7c3aed30;
+    border-radius:16px;
+    padding:16px;
+    margin:15px 0;
+    text-align:center;
+    box-shadow:0 4px 15px #7c3aed10;
+}
+
+.small{ color:#746979; font-size:13px; line-height:1.65; }
+
+/* HISTORY & TASK ITEMS */
+.history{ padding:24px; margin-top:20px; }
+.history-item, .task-item{
+    padding:15px 0;
+    border-bottom:1px solid #ffffff;
+}
+
+/* ADMIN */
+.admin{ width:min(1100px,100%); margin:auto; }
+.request{ padding:22px; margin:18px 0; }
+
+.screenshot-preview{
+    max-width:100%;
+    max-height:250px;
+    border-radius:14px;
+    margin-top:10px;
+    border:1px solid #7c3aed40;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* CONGRATULATIONS OVERLAY POPUP */
+.congrats-modal{
+    position:fixed;
+    top:0; left:0; width:100vw; height:100vh;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(8px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.3s ease;
+}
+
+.congrats-modal.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.congrats-card{
+    background:#ffffffd5;
+    border:2px solid #7c3aed;
+    border-radius:28px;
+    padding:40px 30px;
+    text-align:center;
+    width:min(420px, 90%);
+    box-shadow:0 20px 60px rgba(124, 58, 237, 0.3);
+    transform:scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.congrats-modal.show .congrats-card{
+    transform:scale(1);
+}
+
+.congrats-card h2{
+    color:#7c3aed;
+    font-size:28px;
+    margin:15px 0 10px;
+}
+
+@media(max-width:700px){
+    .grid{ grid-template-columns:1fr; }
+    .nav{ padding:0 4%; }
+    .brand span{ font-size:15px; }
+    .nav-actions .btn{ padding:9px 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+    <div class="brand">
+        <div class="logo">PN</div>
+        <span>Profit Nest</span>
+    </div>
+
+    <div class="nav-actions">
+        <button id="loginNav" class="btn light" onclick="showPage('login')">Login</button>
+        <button id="signupNav" class="btn primary" onclick="showPage('signup')">Signup</button>
+        <button id="logoutNav" class="btn red hidden" onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<!-- CONGRATULATIONS OVERLAY EFFECT -->
+<div id="congratsModal" class="congrats-modal">
+    <div class="congrats-card glass">
+        <div style="font-size:60px;">🎉</div>
+        <h2>Congratulations!</h2>
+        <p style="font-weight:700; color:#281735; margin-bottom:12px;">Your Lifetime Plan is Now Active!</p>
+        <p class="small">Your investment has been processed successfully. Start completing daily tasks to earn rewards!</p>
+        <button class="btn primary" style="margin-top:20px; width:100%;" onclick="closeCongrats()">Continue to Dashboard</button>
+    </div>
+</div>
+
+<!-- HOME PAGE -->
+<section id="home" class="page">
+    <div class="hero glass">
+        <div class="logo" style="margin:auto">PN</div>
+        <h1>Welcome to <span>Profit Nest</span></h1>
+        <p>Create your account, activate your lifetime plan, and complete daily tasks to earn.</p>
+        <div class="actions" style="justify-content:center">
+            <button class="btn primary" onclick="showPage('signup')">Create Account</button>
+            <button class="btn light" onclick="showPage('login')">Login</button>
+        </div>
+    </div>
+</section>
+
+<!-- SIGNUP PAGE -->
+<section id="signup" class="page hidden">
+    <div class="auth glass">
+        <div class="logo" style="margin:auto">PN</div>
+        <h1>Create Account</h1>
+        <p class="sub">Register your member account</p>
+
+        <label>Username</label>
+        <input id="signupUser" type="text" placeholder="Enter username">
+
+        <label>Email</label>
+        <input id="signupEmail" type="email" placeholder="Enter email">
+
+        <label>Password</label>
+        <div class="password-box">
+            <input id="signupPassword" type="password" placeholder="Create password">
+            <button type="button" class="eye-btn" onclick="togglePassword('signupPassword', this)">👁️</button>
+        </div>
+
+        <label>Confirm Password</label>
+        <div class="password-box">
+            <input id="signupConfirm" type="password" placeholder="Confirm password">
+            <button type="button" class="eye-btn" onclick="togglePassword('signupConfirm', this)">👁️</button>
+        </div>
+
+        <label>Referral Code (Optional)</label>
+        <input id="signupRef" type="text" placeholder="Enter referrer username if any">
+
+        <button class="btn primary" style="width:100%;margin-top:20px" onclick="registerUser()">Signup</button>
+
+        <div id="signupMessage"></div>
+
+        <p style="text-align:center;margin-top:18px">
+            Already have an account? <a href="#" onclick="showPage('login')">Login</a>
+        </p>
+    </div>
+</section>
+
+<!-- LOGIN PAGE -->
+<section id="login" class="page hidden">
+    <div class="auth glass">
+        <div class="logo" style="margin:auto">PN</div>
+        <h1>Welcome Back</h1>
+        <p class="sub">Login to your account</p>
+
+        <label>Username</label>
+        <input id="loginUser" placeholder="Enter username">
+
+        <label>Password</label>
+        <div class="password-box">
+            <input id="loginPassword" type="password" placeholder="Enter password">
+            <button type="button" class="eye-btn" onclick="togglePassword('loginPassword', this)">👁️</button>
+        </div>
+
+        <button class="btn primary" style="width:100%;margin-top:20px" onclick="loginUser()">Login</button>
+
+        <div id="loginMessage"></div>
+
+        <p style="text-align:center;margin-top:18px">
+            Don't have an account? <a href="#" onclick="showPage('signup')">Create Account</a>
+        </p>
+    </div>
+</section>
+
+<!-- MEMBER DASHBOARD -->
+<section id="dashboard" class="page hidden">
+    <div class="dashboard">
+
+        <div class="welcome glass">
+            <h1 id="welcomeName">Welcome</h1>
+            <p class="small">Member Dashboard • Referral Code: <strong id="userRefCode" style="color:#7c3aed;">-</strong></p>
+        </div>
+
+        <!-- BALANCE CARD -->
+        <div class="balance glass">
+            <p class="small">Current Balance</p>
+            <div class="balance-number" id="memberBalance">PKR 0</div>
+
+            <div class="actions">
+                <button class="btn primary" onclick="openWithdrawal()">Withdrawal</button>
+                <button class="btn light" onclick="showPage('deposit')">Deposit</button>
+            </div>
+        </div>
+
+        <!-- CARDS GRID -->
+        <div class="grid">
+
+            <!-- PLAN STATUS CARD -->
+            <div class="card glass">
+                <h2>Plan Status</h2>
+                <div>
+                    Status: <span id="planStatus" class="status">Not Active</span>
+                </div>
+                <p class="small" style="margin-top:8px">Duration: <strong style="color:#7c3aed;">Lifetime</strong></p>
+
+                <!-- DAILY EARNING BADGE -->
+                <div class="earning-badge">
+                    💵 Daily Earning: PKR 30 - 50
+                </div>
+
+                <!-- WHITE COLOR ACTIVATE BUTTON -->
+                <button id="investBtn" class="btn white-btn" style="margin-top:15px; width:100%; font-weight:800;" onclick="investInPlan()">
+                    Activate Plan (PKR 1,500)
+                </button>
+
+                <!-- WARNING NOTICE -->
+                <div id="planWarning" class="warning-box hidden">
+                    ⚠️ <strong>Warning:</strong> Agar aapne week mein 2 members add nahi kiye to earning stop ho jaye gi.
+                </div>
+            </div>
+
+            <!-- REFERRAL INFO -->
+            <div class="card glass">
+                <h2>Referral Bonus</h2>
+                <p class="small" style="margin-top:10px">
+                    Earn <strong>PKR 400</strong> bonus for every active member you invite!
+                </p>
+                <div class="info-box" style="margin-top:12px; padding:12px;">
+                    <p class="small">Share your username as Referral Code:</p>
+                    <strong id="refCodeCopy" style="font-size:16px; color:#7c3aed;">-</strong>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DAILY TASKS SECTION -->
+        <div class="history glass" style="margin-top:20px;">
+            <h2>Daily Assigned Tasks</h2>
+            <p class="small">Complete tasks assigned by Admin to earn task rewards.</p>
+            <div id="memberTasksList" style="margin-top:15px">
+                No active tasks available right now.
+            </div>
+        </div>
+
+        <!-- WITHDRAWAL HISTORY -->
+        <div class="history glass">
+            <h2>Withdrawal History</h2>
+            <div id="withdrawalHistory" style="margin-top:15px">
+                No withdrawal requests.
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- DEPOSIT PAGE -->
+<section id="deposit" class="page hidden">
+    <div class="auth glass">
+        <h1>Deposit</h1>
+        <p class="sub">Send payment to the account below, then submit transaction details.</p>
+
+        <div class="info-box">
+            <h3>Deposit Details</h3>
+
+            <div class="payment-card">
+                <p style="font-size:12px; color:#16a34a; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">
+                    Easypaisa Account Details
+                </p>
+                <div style="font-size:22px; font-weight:900; color:#281735; letter-spacing:1px; margin:4px 0;">
+                    03161325177
+                </div>
+                <div style="font-size:14px; font-weight:700; color:#7c3aed;">
+                    Account Name: ZULFIQAR
+                </div>
+            </div>
+
+            <label>Deposit Amount (PKR)</label>
+            <input id="depositAmount" type="number" placeholder="Enter deposit amount (e.g. 1500)">
+
+            <label>Transaction ID</label>
+            <input id="depositTx" type="text" placeholder="Enter transaction ID">
+
+            <label>Receipt Screenshot</label>
+            <input id="depositDocument" type="file" accept="image/*">
+            <p class="small" style="margin-top:6px">Supported files: JPG, PNG screenshot.</p>
+        </div>
+
+        <button class="btn green" style="width:100%;margin-top:18px" onclick="submitDeposit()">Submit Deposit Request</button>
+        <div id="depositMessage"></div>
+        <button class="btn light" style="width:100%;margin-top:10px" onclick="showPage('dashboard')">Back to Dashboard</button>
+    </div>
+</section>
+
+<!-- WITHDRAWAL PAGE -->
+<section id="withdrawal" class="page hidden">
+    <div class="auth glass">
+        <h1>Withdrawal</h1>
+        <p class="sub">Submit your withdrawal request for review.</p>
+
+        <div class="info-box">
+            Current Balance: <strong id="withdrawBalance">PKR 0</strong><br><br>
+            Minimum Withdrawal: <strong>PKR 300</strong>
+        </div>
+
+        <label>Withdrawal Amount</label>
+        <input id="withdrawAmount" type="number" min="300" placeholder="Enter amount">
+
+        <label>Payment Account Details</label>
+        <input id="withdrawAccount" placeholder="Enter Easypaisa/JazzCash account details">
+
+        <button class="btn primary" style="width:100%;margin-top:18px" onclick="submitWithdrawal()">Submit Withdrawal</button>
+        <div id="withdrawMessage"></div>
+        <button class="btn light" style="width:100%;margin-top:10px" onclick="showPage('dashboard')">Back</button>
+    </div>
+</section>
+
+<!-- ADMIN PANEL PAGE -->
+<section id="admin" class="page hidden">
+    <div class="admin">
+        <div class="welcome glass">
+            <h1>Profit Nest Admin</h1>
+            <p class="small">Manage members, balances, custom daily tasks, and requests.</p>
+        </div>
+
+        <!-- CREATE / MODIFY TASKS SECTION -->
+        <div class="glass request">
+            <h2>Task Management (Admin Control)</h2>
+            <p class="small" style="margin-bottom:15px;">Create or modify daily tasks for all or specific members.</p>
+
+            <label>Assign To Member</label>
+            <select id="taskTargetUser">
+                <option value="all">All Members</option>
+            </select>
+
+            <label>Task Description / Title</label>
+            <input id="taskTitle" type="text" placeholder="e.g. Subscribe channel & like video">
+
+            <label>Task Reward Payment (PKR)</label>
+            <input id="taskReward" type="number" placeholder="e.g. 50">
+
+            <button class="btn primary" style="margin-top:15px;" onclick="addOrUpdateTask()">Publish Task</button>
+
+            <div id="adminTasksList" style="margin-top:20px;"></div>
+        </div>
+
+        <div id="adminMembers"></div>
+    </div>
+</section>
+
+<script>
+/* DATABASE INIT */
+let users = JSON.parse(localStorage.getItem("PN_USERS") || "[]");
+let withdrawals = JSON.parse(localStorage.getItem("PN_WITHDRAWALS") || "[]");
+let tasks = JSON.parse(localStorage.getItem("PN_TASKS") || "[]");
+let currentUserId = localStorage.getItem("PN_CURRENT_USER");
+
+function saveData(){
+    localStorage.setItem("PN_USERS", JSON.stringify(users));
+    localStorage.setItem("PN_WITHDRAWALS", JSON.stringify(withdrawals));
+    localStorage.setItem("PN_TASKS", JSON.stringify(tasks));
+}
+
+/* PAGE DISPLAY */
+function showPage(id){
+    document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+
+/* NAVBAR NAVIGATION STATE */
+function memberLoggedIn(){
+    document.getElementById("loginNav").classList.add("hidden");
+    document.getElementById("signupNav").classList.add("hidden");
+    document.getElementById("logoutNav").classList.remove("hidden");
+}
+
+function memberLoggedOut(){
+    document.getElementById("loginNav").classList.remove("hidden");
+    document.getElementById("signupNav").classList.remove("hidden");
+    document.getElementById("logoutNav").classList.add("hidden");
+}
+
+/* PASSWORD SHOW/HIDE TOGGLE */
+function togglePassword(inputId, btn){
+    const input = document.getElementById(inputId);
+    if(input.type === "password"){
+        input.type = "text";
+        btn.textContent = "🔒";
+    }else{
+        input.type = "password";
+        btn.textContent = "👁️";
+    }
+}
+
+/* REGISTER & AUTO LOGIN */
+function registerUser(){
+    const username = document.getElementById("signupUser").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+    const confirm = document.getElementById("signupConfirm").value;
+    const refCode = document.getElementById("signupRef").value.trim();
+    const message = document.getElementById("signupMessage");
+
+    if(!username || !email || !password){
+        message.className = "message error";
+        message.textContent = "Please complete all fields.";
+        return;
+    }
+
+    if(password !== confirm){
+        message.className = "message error";
+        message.textContent = "Passwords do not match.";
+        return;
+    }
+
+    const exists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
+    if(exists){
+        message.className = "message error";
+        message.textContent = "Username already exists.";
+        return;
+    }
+
+    const newUser = {
+        id: Date.now(),
+        username: username,
+        email: email,
+        password: password,
+        referredBy: refCode,
+        balance: 0,
+        status: "pending",
+        planActive: false,
+        feedback: "",
+        depositAmount: 0,
+        depositRequest: false,
+        transactionId: "",
+        documentImage: ""
+    };
+
+    users.push(newUser);
+    saveData();
+
+    // AUTO LOGIN IMMEDIATELY AFTER SIGNUP
+    currentUserId = newUser.id;
+    localStorage.setItem("PN_CURRENT_USER", newUser.id);
+    
+    memberLoggedIn();
+    loadDashboard();
+}
+
+/* LOGIN USER */
+function loginUser(){
+    const username = document.getElementById("loginUser").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const message = document.getElementById("loginMessage");
+
+    /* ADMIN LOGIN (tanoli / tanoli101) */
+    if(username === "tanoli" && password === "tanoli101"){
+        localStorage.setItem("PN_ADMIN", "true");
+        memberLoggedIn();
+        showAdmin();
+        return;
+    }
+
+    const user = users.find(u => u.username === username && u.password === password);
+    if(!user){
+        message.className = "message error";
+        message.textContent = "Invalid username or password.";
+        return;
+    }
+
+    currentUserId = user.id;
+    localStorage.setItem("PN_CURRENT_USER", user.id);
+    memberLoggedIn();
+    loadDashboard();
+}
+
+/* DASHBOARD LOADER */
+function loadDashboard(){
+    const user = users.find(u => u.id == currentUserId);
+    if(!user){
+        memberLoggedOut();
+        showPage("login");
+        return;
+    }
+
+    memberLoggedIn();
+    showPage("dashboard");
+
+    document.getElementById("welcomeName").textContent = "Welcome, " + user.username;
+    document.getElementById("userRefCode").textContent = user.username;
+    document.getElementById("refCodeCopy").textContent = user.username;
+    document.getElementById("memberBalance").textContent = "PKR " + user.balance;
+    document.getElementById("withdrawBalance").textContent = "PKR " + user.balance;
+
+    const status = document.getElementById("planStatus");
+    const warning = document.getElementById("planWarning");
+    const investBtn = document.getElementById("investBtn");
+
+    if(user.planActive){
+        status.textContent = "Active (Lifetime)";
+        status.className = "status active";
+        warning.classList.remove("hidden");
+        investBtn.classList.add("hidden");
+    }else{
+        status.textContent = user.status === "declined" ? "Declined" : "Not Active";
+        status.className = user.status === "declined" ? "status declined" : "status";
+        warning.classList.add("hidden");
+        investBtn.classList.remove("hidden");
+    }
+
+    loadMemberTasks();
+    loadWithdrawalHistory();
+}
+
+/* INVEST IN PLAN (1500 PKR) */
+function investInPlan(){
+    const user = users.find(u => u.id == currentUserId);
+    if(!user) return;
+
+    const PLAN_COST = 1500;
+
+    if(user.balance < PLAN_COST){
+        alert("Insufficient balance! You need PKR 1,500 to activate the lifetime plan. Please deposit first.");
+        showPage('deposit');
+        return;
+    }
+
+    user.balance -= PLAN_COST;
+    user.planActive = true;
+    user.status = "approved";
+    saveData();
+
+    // Trigger Congratulations Popup Effect
+    document.getElementById("congratsModal").classList.add("show");
+    loadDashboard();
+}
+
+function closeCongrats(){
+    document.getElementById("congratsModal").classList.remove("show");
+}
+
+/* MEMBER TASKS LIST (TARGETED TASKS) */
+function loadMemberTasks(){
+    const box = document.getElementById("memberTasksList");
+    const myTasks = tasks.filter(t => t.targetUserId === "all" || t.targetUserId == currentUserId);
+
+    if(!myTasks.length){
+        box.innerHTML = "<p class='small'>No daily tasks assigned to you right now.</p>";
+        return;
+    }
+
+    box.innerHTML = myTasks.map(t => `
+        <div class="task-item">
+            <strong>${safe(t.title)}</strong><br>
+            Reward: <span style="color:#16a34a; font-weight:800;">PKR ${t.reward}</span><br>
+            <button class="btn primary" style="margin-top:8px; padding:6px 12px; font-size:12px;" onclick="claimTask(${t.id}, ${t.reward})">Complete Task</button>
+        </div>
+    `).join("");
+}
+
+function claimTask(taskId, reward){
+    const user = users.find(u => u.id == currentUserId);
+    if(!user) return;
+    if(!user.planActive){
+        alert("Please activate your plan first to complete tasks!");
+        return;
+    }
+
+    user.balance += Number(reward);
+    saveData();
+    alert("Task completed successfully! PKR " + reward + " added to your balance.");
+    loadDashboard();
+}
+
+/* DEPOSIT SUBMISSION WITH BASE64 IMAGE PREVIEW */
+function submitDeposit(){
+    const user = users.find(u => u.id == currentUserId);
+    if(!user){ showPage("login"); return; }
+
+    const amt = Number(document.getElementById("depositAmount").value);
+    const tx = document.getElementById("depositTx").value.trim();
+    const fileInput = document.getElementById("depositDocument");
+    const file = fileInput.files[0];
+    const message = document.getElementById("depositMessage");
+
+    if(!amt || amt <= 0 || !tx || !file){
+        message.className = "message error";
+        message.textContent = "Enter deposit amount, transaction ID, and attach screenshot.";
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        user.depositAmount = amt;
+        user.depositRequest = true;
+        user.transactionId = tx;
+        user.documentImage = e.target.result; // Base64 data string
+        user.status = "pending";
+
+        saveData();
+        message.className = "message success";
+        message.textContent = "Deposit request submitted. Review time within 24 hours.";
+    };
+    reader.readAsDataURL(file);
+}
+
+/* WITHDRAWAL SYSTEM */
+function openWithdrawal(){
+    const user = users.find(u => u.id == currentUserId);
+    if(!user) return;
+    document.getElementById("withdrawBalance").textContent = "PKR " + user.balance;
+    showPage("withdrawal");
+}
+
+function submitWithdrawal(){
+    const user = users.find(u => u.id == currentUserId);
+    const amount = Number(document.getElementById("withdrawAmount").value);
+    const account = document.getElementById("withdrawAccount").value.trim();
+    const message = document.getElementById("withdrawMessage");
+
+    if(amount < 300){
+        message.className = "message error";
+        message.textContent = "Minimum withdrawal is PKR 300.";
+        return;
+    }
+
+    if(amount > user.balance){
+        message.className = "message error";
+        message.textContent = "Insufficient balance.";
+        return;
+    }
+
+    if(!account){
+        message.className = "message error";
+        message.textContent = "Enter payment account details.";
+        return;
+    }
+
+    withdrawals.push({
+        id: Date.now(),
+        userId: user.id,
+        username: user.username,
+        amount: amount,
+        account: account,
+        status: "Reviewing",
+        createdAt: new Date().toISOString()
+    });
+
+    saveData();
+    message.className = "message success";
+    message.textContent = "Withdrawal request submitted for reviewing.";
+    loadWithdrawalHistory();
+}
+
+function loadWithdrawalHistory(){
+    const box = document.getElementById("withdrawalHistory");
+    const list = withdrawals.filter(w => w.userId == currentUserId);
+
+    if(!list.length){
+        box.textContent = "No withdrawal requests.";
+        return;
+    }
+
+    box.innerHTML = list.map(w => `
+        <div class="history-item">
+            <strong>PKR ${w.amount}</strong><br>
+            Status: <strong>${safe(w.status)}</strong><br>
+            <span class="small">${new Date(w.createdAt).toLocaleString()}</span>
+        </div>
+    `).join("");
+}
+
+/* ADMIN PANEL FUNCTIONALITY */
+function showAdmin(){
+    showPage("admin");
+    populateAdminUserSelect();
+    renderAdminTasks();
+    renderAdmin();
+}
+
+function populateAdminUserSelect(){
+    const select = document.getElementById("taskTargetUser");
+    select.innerHTML = `<option value="all">All Members</option>` + 
+        users.map(u => `<option value="${u.id}">${safe(u.username)}</option>`).join("");
+}
+
+/* ADMIN TASK MANAGEMENT */
+function addOrUpdateTask(){
+    const title = document.getElementById("taskTitle").value.trim();
+    const reward = Number(document.getElementById("taskReward").value);
+    const target = document.getElementById("taskTargetUser").value;
+
+    if(!title || !reward){
+        alert("Enter task title and reward amount.");
+        return;
+    }
+
+    tasks.push({ id: Date.now(), title: title, reward: reward, targetUserId: target });
+    saveData();
+
+    document.getElementById("taskTitle").value = "";
+    document.getElementById("taskReward").value = "";
+    renderAdminTasks();
+    alert("Task published successfully!");
+}
+
+function deleteTask(id){
+    tasks = tasks.filter(t => t.id !== id);
+    saveData();
+    renderAdminTasks();
+}
+
+function renderAdminTasks(){
+    const box = document.getElementById("adminTasksList");
+    if(!tasks.length){
+        box.innerHTML = "<p class='small'>No tasks created yet.</p>";
+        return;
+    }
+
+    box.innerHTML = tasks.map(t => {
+        let targetText = "All Members";
+        if(t.targetUserId !== "all"){
+            const targetUser = users.find(u => u.id == t.targetUserId);
+            targetText = targetUser ? targetUser.username : "Specific Member";
+        }
+        return `
+            <div class="task-item" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong>${safe(t.title)}</strong> - <span style="color:#16a34a; font-weight:700;">PKR ${t.reward}</span><br>
+                    <span class="small" style="color:#7c3aed;">Target: ${safe(targetText)}</span>
+                </div>
+                <button class="btn red" style="padding:4px 8px; font-size:11px;" onclick="deleteTask(${t.id})">Delete</button>
+            </div>
+        `;
+    }).join("");
+}
+
+/* ADMIN MEMBERS & REQUESTS */
+function renderAdmin(){
+    const box = document.getElementById("adminMembers");
+    if(!users.length){
+        box.innerHTML = `<div class="glass request">No members registered.</div>`;
+        renderWithdrawals();
+        return;
+    }
+
+    box.innerHTML = users.map(user => `
+        <div class="glass request">
+            <h2>${safe(user.username)}</h2>
+            <p class="small">Email: ${safe(user.email)} | Referred By: <strong>${safe(user.referredBy || 'None')}</strong></p>
+            <p style="margin-top:8px">Current Balance: <strong style="color:#7c3aed; font-size:18px;">PKR ${user.balance}</strong></p>
+            <p style="margin-top:4px">Status: <span class="status">${safe(user.status)}</span></p>
+
+            <div class="info-box" style="margin-top:12px;">
+                <p><strong>Deposit Request Details:</strong></p>
+                <p class="small">Deposit Amount: <strong style="color:#16a34a;">PKR ${user.depositAmount || 0}</strong></p>
+                <p class="small">Tx ID: ${safe(user.transactionId || "None")}</p>
+                ${user.documentImage ? `<img src="${user.documentImage}" class="screenshot-preview" alt="Payment Screenshot">` : `<p class="small">No Screenshot Uploaded</p>`}
+            </div>
+
+            <label>Approve Deposit Amount (PKR) <span style="color:#dc2626;">*Required</span></label>
+            <input id="approveAmt_${user.id}" type="number" placeholder="Enter amount to add on approve" value="${user.depositAmount || ''}">
+
+            <div class="actions" style="margin-top:15px;">
+                <button class="btn green" onclick="approveUser(${user.id})">Approve</button>
+                <button class="btn primary" onclick="giveReferralBonus(${user.id})">+400 PKR Ref Bonus</button>
+                <button class="btn red" onclick="declineUser(${user.id})">Decline</button>
+                <button class="btn red" style="background:#991b1b;" onclick="deleteUser(${user.id})">Delete Account</button>
+            </div>
+        </div>
+    `).join("");
+
+    renderWithdrawals();
+}
+
+/* APPROVE USER WITH MANDATORY AMOUNT INPUT */
+function approveUser(id){
+    const user = users.find(u => u.id === id);
+    if(!user) return;
+
+    const inputAmt = Number(document.getElementById("approveAmt_" + id).value);
+    if(!inputAmt || inputAmt <= 0){
+        alert("Pehle amount likhein ke kitne PKR balance mein add karne hain!");
+        return;
+    }
+
+    user.balance += inputAmt;
+    user.status = "approved";
+    user.depositRequest = false;
+    saveData();
+    renderAdmin();
+    alert(`Approved! PKR ${inputAmt} added to ${user.username}'s balance.`);
+}
+
+function giveReferralBonus(id){
+    const user = users.find(u => u.id === id);
+    if(!user) return;
+
+    user.balance += 400;
+    saveData();
+    renderAdmin();
+    alert("PKR 400 referral bonus added to " + user.username);
+}
+
+function declineUser(id){
+    const user = users.find(u => u.id === id);
+    if(!user) return;
+
+    user.status = "declined";
+    saveData();
+    renderAdmin();
+}
+
+function deleteUser(id){
+    if(confirm("Are you sure you want to permanently delete this member account?")){
+        users = users.filter(u => u.id !== id);
+        saveData();
+        showAdmin();
+    }
+}
+
+function renderWithdrawals(){
+    const container = document.createElement("div");
+    container.className = "glass request";
+    container.innerHTML = `<h2>Withdrawal Requests</h2>`;
+
+    if(!withdrawals.length){
+        container.innerHTML += `<p class="small" style="margin-top:12px">No withdrawal requests.</p>`;
+    }else{
+        withdrawals.forEach(request => {
+            container.innerHTML += `
+                <div class="history-item">
+                    <strong>${safe(request.username)}</strong><br>
+                    Amount: PKR ${request.amount}<br>
+                    Account: ${safe(request.account)}<br>
+                    Status: <strong>${safe(request.status)}</strong>
+                    <div class="actions">
+                        <button class="btn green" onclick="approveWithdrawal(${request.id})">Approve</button>
+                        <button class="btn red" onclick="declineWithdrawal(${request.id})">Decline</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    document.getElementById("adminMembers").appendChild(container);
+}
+
+function approveWithdrawal(id){
+    const request = withdrawals.find(w => w.id === id);
+    if(!request) return;
+    request.status = "Approved";
+    saveData();
+    renderAdmin();
+}
+
+function declineWithdrawal(id){
+    const request = withdrawals.find(w => w.id === id);
+    if(!request) return;
+    request.status = "Declined";
+    saveData();
+    renderAdmin();
+}
+
+function logout(){
+    localStorage.removeItem("PN_CURRENT_USER");
+    localStorage.removeItem("PN_ADMIN");
+    currentUserId = null;
+    memberLoggedOut();
+    showPage("home");
+}
+
+function safe(value){
+    return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+/* INITIAL LOAD CHECK */
+if(currentUserId){
+    loadDashboard();
+}else{
+    memberLoggedOut();
+    showPage("home");
+}
+</script>
+
+</body>
+</html>
